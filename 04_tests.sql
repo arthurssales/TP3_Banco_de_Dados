@@ -1,6 +1,5 @@
 -- =====================================================================
 -- TP3 - Banco de Dados | 04_tests.sql
--- Execute DEPOIS de 01, 02 e 03. Pode ser rodado várias vezes
 -- (testes que alteram dados terminam em ROLLBACK).
 -- =====================================================================
 
@@ -43,7 +42,7 @@ SELECT p.id_usuario, p.nome, p.sobrenome
 FROM paciente p
 WHERE p.id_usuario IN (SELECT ct.id_usuario
                        FROM conta ct
-                       WHERE ct.situacao = 'Vencida');
+                       WHERE ct.situacao = 'Pendente');
 
 -- Subconsulta correlata: pacientes que têm ao menos uma consulta agendada
 SELECT p.nome
@@ -156,14 +155,14 @@ END $$;
 -- ---------------------------------------------------------------
 BEGIN;
 UPDATE conta SET situacao = 'Paga' WHERE id_conta = 10;
-SELECT id_conta, situacao FROM conta WHERE id_conta = 10;   -- visto como Paga
+SELECT id_conta, situacao FROM conta WHERE id_conta = 10;   
 ROLLBACK;
-SELECT id_conta, situacao FROM conta WHERE id_conta = 10;   -- voltou a Pendente
+SELECT id_conta, situacao FROM conta WHERE id_conta = 10;   
 
 BEGIN;
 UPDATE conta SET situacao = 'Paga' WHERE id_conta = 10;
 COMMIT;
-SELECT id_conta, situacao FROM conta WHERE id_conta = 10;   -- persistiu como Paga
+SELECT id_conta, situacao FROM conta WHERE id_conta = 10; 
 
 -- Restaura o estado original para permitir reexecução do script
 UPDATE conta SET situacao = 'Pendente' WHERE id_conta = 10;
